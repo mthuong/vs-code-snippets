@@ -1,4 +1,49 @@
 {
+	"Define bloc state": {
+		"prefix": "blocstate",
+		"description": "blocstate",
+		"scope": "dart",
+		"body": [
+			"part of '${2:file_name}_bloc.dart';",
+			"",
+			"enum ${1:State}Validation {",
+			"  success,",
+			"  unknownError,",
+			"  missingEmail,",
+			"}",
+			"",
+			"@immutable",
+			"@freezed",
+			"class ${1:State}State with _\\$${1:State}State, ErrorState {",
+			"  const factory ${1:State}State({",
+			"    @Default([]) List<${1:State}Validation> validations,",
+			"    @Default('') String email,",
+			"    @Default(false) bool isLoading,",
+			"    @Default(null) int? statusCode,",
+			"    @Default(null) String? errorCode,",
+			"    @Default(null) String? errorMsg,",
+			"  }) = _${1:State}State;",
+			"}"
+		]
+	},
+	"Define Bloc event": {
+		"prefix": "blocevent",
+		"description": "blocevent",
+		"scope": "dart",
+		"body": [
+			"part of '${3:file_name}_bloc.dart';",
+			"",
+			"abstract class ${1:Event}Event {}",
+			"",
+			"@freezed",
+			"class ${2:An event} extends ${1:Event}Event",
+			"    with _\\$${2:An event} {",
+			"  const factory ${2:An event}(String email) =",
+			"      _${2:An event};",
+			"}",
+			""
+		]
+	},
 	"page": {
 		"prefix": "page",
 		"description": "page",
