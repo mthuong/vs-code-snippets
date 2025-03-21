@@ -1,4 +1,87 @@
 {
+	"Bloc fetch": {
+		"prefix": "bloc_fetch",
+		"description": "Implement fetch API",
+		"scope": "dart",
+		"body": [
+			"   try {",
+			"      emit(state.copyWith(isLoading: true));",
+			"",
+			"      final result = await repository.fetch();",
+			"",
+			"      if (result.data != null) {",
+			"        final data = invoiceResult.data!;",
+			"        emit(",
+			"          state.copyWith(",
+			"            data: data,",
+			"          ),",
+			"        );",
+			"      }",
+			"",
+			"    } on RepositoryException catch (repositoryException) {",
+			"      if (repositoryException.notify()) {",
+			"        _crashReporter.notify(repositoryException, StackTrace.current);",
+			"      }",
+			"      emit(",
+			"        state.copyWith(",
+			"          validations: [Validation.unknownError],",
+			"          isLoading: false,",
+			"          statusCode: repositoryException.statusCode,",
+			"          errorCode: repositoryException.errorCode,",
+			"          errorMsg: repositoryException.errorMsg ?? '',",
+			"        ),",
+			"      );",
+			"    } on Exception catch (e) {",
+			"      emit(",
+			"        state.copyWith(",
+			"          validations: [InvoiceCreationValidation.unknownError],",
+			"          errorMsg: e.toString(),",
+			"        ),",
+			"      );",
+			"    } finally {",
+			"      emit(",
+			"        state.copyWith(",
+			"          isSaving: false,",
+			"          validations: [],",
+			"          statusCode: null,",
+			"          errorCode: null,",
+			"          errorMsg: null,",
+			"          SubmittedResult:",
+			"              ESubmittedResult.initial,",
+			"        ),",
+			"      );",
+			"    }"
+		]
+	},
+	"Import error_state": {
+		"prefix": "importe",
+		"description": "Import error_state localization",
+		"scope": "dart",
+		"body": [
+			"import 'package:error_state/l10n/app_localizations.dart' as error_state;"
+		]
+	},
+	"Theme of": {
+		"prefix": "themeof",
+		"description": "Theme of context",
+		"scope": "dart",
+		"body": [
+			"Theme.of(context)."
+		]
+	},
+	"New Bloc event": {
+		"prefix": "newblocevent",
+		"description": "newblocevent",
+		"scope": "dart",
+		"body": [
+			"@freezed",
+			"class ${1:An_event} extends ${2:Event}Event",
+			"    with _\\$${1:An_event} {",
+			"  const factory ${1:An_event}(String email) =",
+			"      _${1:An_event};",
+			"}"
+		]
+	},
 	"Define bloc state": {
 		"prefix": "blocstate",
 		"description": "blocstate",
@@ -6,7 +89,7 @@
 		"body": [
 			"part of '${2:file_name}_bloc.dart';",
 			"",
-			"enum ${1:State}Validation {",
+			"enum E${1:State}Validation {",
 			"  success,",
 			"  unknownError,",
 			"  missingEmail,",
@@ -15,13 +98,16 @@
 			"@immutable",
 			"@freezed",
 			"class ${1:State}State with _\\$${1:State}State, ErrorState {",
+			"  const ${1:State}State._();",
+			"",
 			"  const factory ${1:State}State({",
-			"    @Default([]) List<${1:State}Validation> validations,",
-			"    @Default('') String email,",
-			"    @Default(false) bool isLoading,",
+			"    @Default([]) List<E${1:State}Validation> validations,",
 			"    @Default(null) int? statusCode,",
 			"    @Default(null) String? errorCode,",
 			"    @Default(null) String? errorMsg,",
+			"",
+			"    @Default('') String email,",
+			"    @Default(false) bool isLoading,",
 			"  }) = _${1:State}State;",
 			"}"
 		]
@@ -38,7 +124,7 @@
 			"@freezed",
 			"class ${2:An event} extends ${1:Event}Event",
 			"    with _\\$${2:An event} {",
-			"  const factory ${2:An event}(String email) =",
+			"  const factory ${2:An event}() =",
 			"      _${2:An event};",
 			"}",
 			""
@@ -59,8 +145,16 @@
 			"  @override",
 			"  Widget build(BuildContext context) => Scaffold(",
 			"        appBar: AppBar(",
-			"          title: 'title',",
-			"          automaticallyImplyLeading: false,",
+			"          leading: AppBackButton(",
+			"            onPressed: () {",
+			"              Modular.to.pop();",
+			"            },",
+			"          ),",
+			"          title: Text(",
+			"            AppLocalizations.of(context).clientDetails__title,",
+			"            style: context.headline3,",
+			"          ),",
+			"          centerTitle: true,",
 			"        ),",
 			"        body: MultiBlocProvider(",
 			"          providers: [",
@@ -104,19 +198,18 @@
 			"on<${1:Event}>(_on${1:Event});"
 		]
 	},
-
 	"Bloc event handler": {
-  "prefix": "blochandler",
-  "body": [
-	"void _on${1:Event}(",
-	"    ${1:Event} event,",
-	"    Emitter<${2:State}> emit,",
-	") {",
-	"  // nope",
-	"}"
-],
-  "description": "Bloc event handler"
-}
+		"prefix": "blochandler",
+		"body": [
+			"void _on${1:Event}(",
+			"    ${1:Event} event,",
+			"    Emitter<${2:State}> emit,",
+			") {",
+			"  // nope",
+			"}"
+		],
+		"description": "Bloc event handler"
+	}
 	// Place your global snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
 	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
 	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
